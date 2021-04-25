@@ -196,7 +196,7 @@ buttons.home.on('clicked', () => {
 
 buttons.add_bookmark.on('clicked', () => {
 	config.bookmarks[webView.getTitle()] = webView.getUri()
-	fs.writeFileSync('config.json', JSON.stringify(config, null, '\t'))
+	fs.writeFileSync(process.argv[2], JSON.stringify(config, null, '\t'))
 
 	ignoreChange = true
 
@@ -208,7 +208,7 @@ buttons.add_bookmark.on('clicked', () => {
 
 buttons.remove_bookmark.on('clicked', () => {
 	config.bookmarks[webView.getTitle()] = undefined
-	fs.writeFileSync('config.json', JSON.stringify(config, null, '\t'))
+	fs.writeFileSync(process.argv[2], JSON.stringify(config, null, '\t'))
 
 	ignoreChange = true
 
@@ -233,7 +233,9 @@ buttons.emoji.on('clicked', () => {
 })
 
 buttons.note.on('clicked', () => {
+	extensions.event('onPopup', [ 'notes', 'OPEN' ])
 	notes(getPageName(webView.getUri()), config.notes)
+	extensions.event('onPopup', [ 'notes', 'CLOSE' ])
 })
 
 extraButtons.extension.on('clicked', () => {
@@ -443,12 +445,25 @@ if (config.dark) {
 
 function main(argc: number, args: string[]) {
 	extensions.init({
-		window: win,
-		webView: webView,
-		config: config,
-		gtk: Gtk,
-		webkit2: WebKit2,
-		urlBar: urlBar
+		window: win, // Gtk.Window
+		webView: webView, // WebKit2.WebView
+		config: config, // Browser config
+		Gtk: Gtk, // Gtk object
+		WebKit2: WebKit2, // WebKit2 object
+		layout: {
+			buttons: buttons, // Json object of default buttons
+			extraButtons: extraButtons, // Json object of extra buttons
+			toolbar: toolbar, // The toolbar for holding default buttons: Gtk.Toolbar
+			progressBar: progress, // The loading progress bar: Gtk.ProgressBar
+			spinner: spinner, // Gtk.Spinner
+			infoLabel: infoLabel, // The label at the bottom: Gtk.Label
+			urlBar: urlBar, // Urlbar entry
+			extendedToolbar: extendedToolbar // The toolbar that holds extra buttons
+		},
+		instances: {
+			ExtensionsManager: extensions, // The class instance that handles extensions
+			RichPresence: presence // The class that handles discord rpc
+		}
 	})
 
 	load(`${config.assetsFolder}/music.mp3`).then((buffer: AudioBuffer) => {

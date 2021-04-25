@@ -75,28 +75,31 @@ function init(data) {
 > Called by
 ```ts
 extensions.init({
-		window: win,
-		webView: webView,
-		config: config,
-		gtk: Gtk,
-		webkit2: WebKit2,
-		urlBar: urlBar
-	})
+	window: win, // Gtk.Window
+	webView: webView, // WebKit2.WebView
+	config: config, // Browser config
+	Gtk: Gtk, // Gtk object
+	WebKit2: WebKit2, // WebKit2 object
+	layout: {
+		buttons: buttons, // Json object of default buttons
+		extraButtons: extraButtons, // Json object of extra buttons
+		toolbar: toolbar, // The toolbar for holding default buttons: Gtk.Toolbar
+		progressBar: progress, // The loading progress bar: Gtk.ProgressBar
+		spinner: spinner, // Gtk.Spinner
+		infoLabel: infoLabel, // The label at the bottom: Gtk.Label
+		urlBar: urlBar, // Urlbar entry
+		extendedToolbar: extendedToolbar // The toolbar that holds extra buttons
+	},
+	instances: {
+		ExtensionsManager: extensions, // The class instance that handles extensions
+		RichPresence: presence // The class that handles discord rpc
+	}
+})
 ```
 
 This function recieves data from the main proces, once the `main` function is called
 *__Arguments:__*
-`data` - A json object of important objects from the main process
-```
-┃
-┣ `window` - Gtk.Window
-┣ `webView` - WebKit2.WebView
-┣ `config` - Browser configuration
-┣ `gtk` - Gtk
-┣ `webkit2` - WebKit2
-┣ `config` - Any json config you have for your extension
-┗ `urlBar` - Gtk.Entry
-```
+`data` - A json object of important objects from the main process. *The contents are visible in the "called by" part*
 
 #### `onBrowserStart()`
 ```js
@@ -161,8 +164,11 @@ extensions.event('onLoadChange', [ loadEvent, webView, win ])
 
 ### Helpful resources
 [Gtk classes reference](https://lazka.github.io/pgi-docs/Gtk-3.0/classes.html)
+
 [WebKit2 WebView class reference](https://lazka.github.io/pgi-docs/WebKit2-4.0/classes/WebView.html)
+
 > Keep in mind that the 2 above use `_<loweracse>` instead of `<uppercase>` in their function names, so eg. `set_text()` is actually `setText()`
+
 [Google](https://google.com/)
 
 ### Examples
@@ -172,7 +178,7 @@ Set the urlbar text to `This is an annoying extension` on each page load
 const { data } = require('./init')
 
 function onPageLoaded(webView, win) {
-	data.urlBar.setText('This is an annoying extension')
+	data.layout.urlBar.setText('This is an annoying extension')
 }
 
 module.exports = onPageLoaded
