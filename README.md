@@ -27,8 +27,8 @@ Older versions *might* work, but I wont provide support if you dont meet the dep
 * Have a note for each page
 * Extensions
 * Configuration
-* Discord rich presence *can be toggled on and off*
 * Playful design
+* Discord rich presence *can be toggled on and off*
 * Dark mode
 * Markdown support
 * Bookmarks
