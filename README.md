@@ -1,4 +1,7 @@
-![logo](https://media.discordapp.net/attachments/689371136076808200/834155707678589008/worstbrewser_ikona_Vlastni.png?width=115&height=115)
+<p align="center">
+<img src="https://media.discordapp.net/attachments/689371136076808200/834155707678589008/worstbrewser_ikona_Vlastni.png?width=115&height=115" alt="logo">
+</p>
+
 # WorstBrowser
 A Ms Edge-like awful browser for linux. Open source and GTK. *This is a joke; Please don't take it seriously.*
 
