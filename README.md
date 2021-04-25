@@ -50,3 +50,6 @@ Also please try to format the code the way its formatted
 ![duckduckgo](https://cdn.discordapp.com/attachments/835171063251206205/835490874678181928/Snimek_z_2021-04-24_14-22-20.png)
 
 ![npm](https://cdn.discordapp.com/attachments/835171063251206205/835491018131505222/Snimek_z_2021-04-24_14-22-51.png)
+
+### *Banner*
+![banner](https://cdn.discordapp.com/attachments/689371136076808200/835171963420278874/Worstbrowser1promo.png)
