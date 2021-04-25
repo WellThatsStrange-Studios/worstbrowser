@@ -1,0 +1,1 @@
+export interface WebKitLoadEvent { STARTED: 0, REDIRECTED: 1, COMMITTED: 2, FINISHED: 3 }

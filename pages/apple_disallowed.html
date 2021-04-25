@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>HomePage</title>
+	</head>
+	<body>
+		<h1>Apple does not want you!</h1>
+		<h1 style="color: red;">APPLE DOES NOT WANT YOU</h1>
+
+		<input type="text" id="in" placeholder="APPLE DOES NOT WANT YOU">
+		<button id="s" onclick="s()">APPLE DOES NOT WANT YOU</button>
+
+		<script>
+			window.savePage = true
+
+			function s() {
+				console.log('searching')
+				window.location.href = `https://duckduckgo.com/?q=${document.getElementById('in').value}&ia=web&does_apple_want_you=NO`
+			}
+		</script>
+	</body>
+</html>

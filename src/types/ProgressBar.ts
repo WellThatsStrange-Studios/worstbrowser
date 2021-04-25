@@ -1,0 +1,17 @@
+export interface ProgressBar {
+	getEllipsize: (() => any)
+	getFraction: (() => any)
+	getInverted: (() => any)
+	getPulseStep: (() => any)
+	getShowText: (() => any)
+	getText: (() => any)
+	pulse: (() => any)
+	setEllipsize: ((mode) => any)
+	setFraction: ((fraction) => any)
+	setInverted: ((inverted) => any)
+	setPulseStep: ((fraction) => any)
+	setShowText: ((show_text) => any)
+	setText: ((text) => any)
+	show: (() => any)
+	hide: (() => any)
+}

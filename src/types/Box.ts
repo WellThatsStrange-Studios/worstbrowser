@@ -1,0 +1,17 @@
+export interface Box {
+	show: (() => any)
+	hide: (() => any)
+	getBaselinePosition: (() => any)
+	getCenterWidget: (() => any)
+	getHomogeneous: (() => any)
+	getSpacing: (() => any)
+	packEnd: ((child, expand, fill, padding) => any)
+	packStart: ((child, expand, fill, padding) => any)
+	queryChildPacking: ((child) => any)
+	reorderChild: ((child, position) => any)
+	setBaselinePosition: ((position) => any)
+	setCenterWidget: ((widget) => any)
+	setChildPacking: ((child, expand, fill, padding, pack_type) => any)
+	setHomogeneous: ((homogeneous) => any)
+	setSpacing: ((spacing) => any)
+}

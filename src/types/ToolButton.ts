@@ -1,0 +1,18 @@
+export interface ToolButton {
+	show: (() => any)
+	hide: (() => any)
+	getIconName: (() => any)
+	getIconWidget: (() => any)
+	getLabel: (() => any)
+	getLabelWidget: (() => any)
+	getStockId: (() => any)
+	getUseUnderline: (() => any)
+	setIconName: ((icon_name) => any)
+	setIconWidget: ((icon_widget) => any)
+	setLabel: ((label) => any)
+	setLabelWidget: ((label_widget) => any)
+	setStockId: ((stock_id) => any)
+	setUseUnderline: ((use_underline) => any)
+	on: ((event: string, fallback: any) => any)
+	setSensitive: ((bool: boolean) => any)
+}

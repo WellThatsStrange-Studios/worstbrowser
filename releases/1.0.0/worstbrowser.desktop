@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+
+Name=WorstBrowser
+Categories=Development;
+
+X-GNOME-FullName=WorstBrowser
+Comment=Microsoft certified browser #1
+
+Icon=/home/dan/Soubory/JS/worstbrowser/assets/128.png
+NoDisplay=false
+
+Exec=node '/home/dan/Soubory/JS/worstbrowser/out/main.js' '/home/dan/Soubory/JS/worstbrowser/config.json' '/home/dan/Soubory/JS/worstbrowser/history.json'
+
+Path=
+Terminal=false
+X-GNOME-UsesNotifications=false

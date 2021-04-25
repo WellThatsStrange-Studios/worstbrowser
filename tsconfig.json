@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"module": "CommonJS",
+		"target": "ES6",
+		"skipLibCheck": true,
+		"outDir": "out"
+	},
+	"include": ["src/*.ts"]
+}
