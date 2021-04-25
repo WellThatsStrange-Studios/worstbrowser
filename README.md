@@ -28,7 +28,7 @@ Older versions *might* work, but I wont provide support if you dont meet the dep
 * Extensions
 * Configuration
 * Discord rich presence *can be toggled on and off*
-* Plyful design
+* Playful design
 * Dark mode
 * Markdown support
 * Bookmarks
