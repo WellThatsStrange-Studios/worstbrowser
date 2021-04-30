@@ -1,0 +1,17 @@
+data:
+  alertText: 'hello world'
+
+commands:
+  - {
+    cmd: 'ext-install',
+    args: [ 'https://extensions.xyz/ext1.zip' ]
+  }
+  - { cmd: 'save-bookmark' }
+  - {
+    cmd: 'popup',
+    args: [ { data: 'alertText' } ]
+  }
+  - {
+    cmd: 'notify',
+    args: [ { data: 'alertText' }, 'THis is an popup' ]
+  }

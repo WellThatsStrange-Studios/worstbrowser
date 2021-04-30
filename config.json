@@ -7,11 +7,12 @@
 		"Debug webpage": "worstbrowser:debug",
 		"DuckDuckGo — Ochrana soukromí, zjednodušená.": "https://duckduckgo.com/",
 		"HomePage": "file:///home/dan/Soubory/JS/worstbrowser/pages/home.html",
-		"Apple": "https://www.apple.com/"
+		"Apple": "https://www.apple.com/",
+		"WorstBrowser debug": "file:///home/dan/Soubory/JS/worstbrowser/pages/debug.html"
 	},
 	"defultPagesDir": "/home/dan/Soubory/JS/worstbrowser/pages",
 	"assetsFolder": "/home/dan/Soubory/JS/worstbrowser/assets",
-	"securityFile": "/home/dan/Soubory/JS/worstbrowser/lock.json",
+	"lockFile": "/home/dan/Soubory/JS/worstbrowser/worstbrowser.lock",
 	"extensions": "/home/dan/Soubory/JS/worstbrowser/extensions",
 	"extensionsConfig": "/home/dan/Soubory/JS/worstbrowser/extensions/config.json",
 	"notes": "/home/dan/Soubory/JS/worstbrowser/notes.json"

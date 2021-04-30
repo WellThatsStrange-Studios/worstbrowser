@@ -2,3 +2,7 @@ node_modules/
 logs/
 extensions/
 out/
+history.json
+config.json
+lock.json
+notes.json

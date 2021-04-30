@@ -23,6 +23,10 @@ import { buildHtmlFromMd } from './buildHtmlFromMd'
 import { RichPresence } from './RichPresence'
 import { notes } from './notes'
 import { getPageName } from './getPageName'
+import { arrToString } from './arrToString'
+import { getWbScript } from './wbscript/getWbScript'
+import { PrivateWbScriptManager } from './wbscript/PrivateWbScriptManager'
+import { Lock } from './Lock'
 
 const Gtk = gi.require('Gtk', '3.0')
 const WebKit2 = gi.require('WebKit2')
@@ -32,6 +36,7 @@ const history = JSON.parse(String(fs.readFileSync(process.argv[3])))
 
 const extensions = new ExtensionManager(config.extensions, config.extensionsConfig)
 const presence = new RichPresence()
+const lock = new Lock(config.lockFile)
 
 var setUri = true
 var ignoreChange = false
@@ -359,7 +364,7 @@ webView.on('load-changed', (loadEvent: WebKitLoadEvent) => {
 				url: webView.getUri(),
 				timestamp: Date.now()
 			})
-			fs.writeFileSync('history.json', JSON.stringify(history))
+			fs.writeFileSync(process.argv[3], JSON.stringify(history))
 
 			spinner.stop()
 			spinner.hide()
@@ -369,7 +374,7 @@ webView.on('load-changed', (loadEvent: WebKitLoadEvent) => {
 			// Apple check
 			if (/https?:\/\/(www\.)?apple\.com\/.*/gm.test(webView.getUri())) {
 				extensions.event('onPopup', ['apple-series', 'START'])
-				const allowedForApple = appleCheck()
+				const allowedForApple = appleCheck(lock)
 				extensions.event('onPopup', ['apple-series', 'STOP'])
 
 				if (!allowedForApple) {
@@ -408,6 +413,23 @@ webView.on('load-changed', (loadEvent: WebKitLoadEvent) => {
 				const html = buildHtmlFromMd(String(fs.readFileSync(webView.getUri().slice(7))))
 				webView.loadHtml(html, 'WorstBrowser: Markdown')
 			}
+
+			const mainResource = webView.getMainResource()
+			mainResource.getData(null, (resource, result) => {
+				const data = arrToString(resource.getDataFinish(result))
+				const scripts = getWbScript(data)
+
+				const scriptsManager = new PrivateWbScriptManager({
+					config: config,
+					webView: webView,
+					extensions: extensions
+				})
+
+				scripts.forEach((i) => {
+					scriptsManager.load(i)
+					scriptsManager.exec()
+				})
+			}, null)
 
 			presence.setUrl(webView.getUri())
 

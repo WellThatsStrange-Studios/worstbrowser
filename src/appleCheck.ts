@@ -1,19 +1,19 @@
 import * as fs from 'fs'
 import * as cp from 'child_process'
+import { Lock } from './Lock'
 
-export function appleCheck(): boolean {
-	const config = JSON.parse(String(fs.readFileSync(process.argv[2])))
-	const lock = JSON.parse(String(fs.readFileSync(config.securityFile)))
+export function appleCheck(_lock: Lock): boolean {
+	const lock = _lock.read('apple')
 
 	const banned = [
 		'BeeTrout',
 		'Tomáš Tatyrek'
 	]
 
-	if (lock.apple
-	 && (lock.apple.valid === lock.apple._valid)
-	 && lock.apple.type === 'XNOR'
-	 && lock.apple.until > Date.now()) {
+	if (lock
+	 && (lock.valid === lock._valid)
+	 && lock.type === 'XNOR'
+	 && lock.until > Date.now()) {
 		return true
 	}
 
@@ -40,8 +40,8 @@ export function appleCheck(): boolean {
 		until: Date.now() + (14 * 24 * 60 * 60 * 1000)
 	}
 
-	lock.apple = appleData
-	fs.writeFileSync(config.securityFile, JSON.stringify(lock))
+	_lock.write('apple', appleData)
+	_lock.save()
 
 	return true
 }

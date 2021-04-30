@@ -1,5 +1,8 @@
 import * as fs from 'fs'
 import * as YAML from 'yaml'
+import * as fetch from 'node-fetch'
+import * as Downloader from 'nodejs-file-downloader'
+import * as extract from 'extract-zip'
 
 export interface ExtensionData {
 	name: string
@@ -115,5 +118,33 @@ export class ExtensionManager {
 				}
 			}
 		})
+	}
+
+	public installFromLink(link: string) {
+		console.log('Downloading an extension: 0%')
+
+		const d = new Downloader({
+			url: link,
+			directory: this.dir,
+			filename: '__ext_install.zip',
+
+			onProgress: (percents: number) => {
+				console.log(`\x1b[ADownloading an extension: ${percents}%`)
+			}
+		})
+
+		d.download()
+			.then(() => {
+				console.log('\x1b[ADownloading an extension: DONE      ')
+				console.log('Installing an extension [...]')
+
+				extract(this.dir + '/__ext_install.zip', { dir: this.dir })
+					.then(() => {
+						console.log('\x1b[AInstalling an extension DONE    ')
+						console.log('Removing cache [...]')
+						fs.rmSync(this.dir + '/__ext_install.zip')
+						console.log('\x1b[ARemoving cache DONE     ')
+					})
+			})
 	}
 }
