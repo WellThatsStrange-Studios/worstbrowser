@@ -1,4 +1,21 @@
 #!/bin/bash
+function __addtrycatch() {
+	for i in $1/*; do
+		if [[ -f "$i" ]]; then
+			data=$(cat "$i")
+
+			echo 'try {' > "$i"
+			echo "$data" >> "$i"
+			echo '} catch (error) {' >> "$i"
+			echo "const exec = require('child_process').execSync" >> "$i"
+			echo 'exec(`zenity --error --text "${error}" --width 200`)' >> "$i"
+			echo '}' >> "$i"
+		fi
+
+		[[ -d "$i" ]] && __addtrycatch "$i"
+	done
+}
+
 function run() {
 	tsc 1>&2
 	_resp=$?
@@ -6,6 +23,8 @@ function run() {
 	if [[ $_resp -ne 0 ]]; then
 		return $_resp
 	fi
+
+	__addtrycatch "out"
 
 	node out/main.js \
 		"./config.json" \

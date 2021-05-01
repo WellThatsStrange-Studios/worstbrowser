@@ -5,6 +5,7 @@ import * as notifier from 'node-notifier'
 import * as load from 'audio-loader'
 import * as play from 'audio-play'
 import * as open from 'open'
+import * as cp from 'child_process'
 
 import { parseLink } from './parseLink'
 import { Toolbar } from './types/Toolbar'
@@ -25,8 +26,11 @@ import { notes } from './notes'
 import { getPageName } from './getPageName'
 import { arrToString } from './arrToString'
 import { getWbScript } from './wbscript/getWbScript'
+import { getPublicWbScript } from './wbscript/getPublicWbScript'
 import { PrivateWbScriptManager } from './wbscript/PrivateWbScriptManager'
+import { PublicWbScriptManager } from './wbscript/PublicWbScriptManager'
 import { Lock } from './Lock'
+import { installCertificate } from './installCertificate'
 
 const Gtk = gi.require('Gtk', '3.0')
 const WebKit2 = gi.require('WebKit2')
@@ -110,6 +114,7 @@ interface ExtendedToolbarButtons {
 	extension: ToolButton
 	start_rpc: ToolButton
 	end_rpc: ToolButton
+	add_cert: ToolButton
 }
 
 const extraButtons: ExtendedToolbarButtons = {
@@ -117,7 +122,8 @@ const extraButtons: ExtendedToolbarButtons = {
 	options: Gtk.ToolButton.newFromStock(Gtk.STOCK_PREFERENCES),
 	extension: Gtk.ToolButton.newFromStock(Gtk.STOCK_INDEX),
 	start_rpc: Gtk.ToolButton.newFromStock(Gtk.STOCK_MEDIA_PLAY),
-	end_rpc: Gtk.ToolButton.newFromStock(Gtk.STOCK_MEDIA_STOP)
+	end_rpc: Gtk.ToolButton.newFromStock(Gtk.STOCK_MEDIA_STOP),
+	add_cert: Gtk.ToolButton.newFromStock(Gtk.STOCK_APPLY)
 }
 
 const urlBar = new Gtk.Entry('Enter search or domain')
@@ -270,6 +276,18 @@ extraButtons.options.on('clicked', async () => {
 	await open(process.argv[2])
 })
 
+extraButtons.add_cert.on('clicked', async () => {
+	extensions.event('onPopup', [ 'certificates', 'START' ])
+	const resp = await installCertificate(lock)
+	extensions.event('onPopup', [ 'certificates', 'STOP' ])
+
+	if (resp === false) {
+		cp.execSync(`notify-send "Not installed" "Certificate was not installed, either it was canceled by user or certificate is invalid" -i emblem-unreadable`)
+	} else {
+		extensions.event('onCertificateInstall', [])
+	}
+})
+
 buttons.toggleExtraToolbar.on('clicked', () => {
 	if (extraToolbarVisible) {
 		extendedToolbar.hide()
@@ -417,18 +435,40 @@ webView.on('load-changed', (loadEvent: WebKitLoadEvent) => {
 			const mainResource = webView.getMainResource()
 			mainResource.getData(null, (resource, result) => {
 				const data = arrToString(resource.getDataFinish(result))
-				const scripts = getWbScript(data)
 
-				const scriptsManager = new PrivateWbScriptManager({
+				if (!lock.read('privateWbScript')) {
+					lock.write('privateWbScript', [])
+					lock.save()
+				}
+
+				if (lock.read('privateWbScript').includes(getPageName(webView.getUri()))) {
+					const scripts = getWbScript(data)
+
+					const scriptsManager = new PrivateWbScriptManager({
+						config: config,
+						webView: webView,
+						extensions: extensions
+					})
+	
+					scripts.forEach((i) => {
+						scriptsManager.load(i)
+						scriptsManager.exec()
+					})
+				}
+
+				const scripts = getPublicWbScript(data)
+
+				const scriptsManager = new PublicWbScriptManager({
 					config: config,
 					webView: webView,
 					extensions: extensions
 				})
-
+	
 				scripts.forEach((i) => {
 					scriptsManager.load(i)
 					scriptsManager.exec()
 				})
+				
 			}, null)
 
 			presence.setUrl(webView.getUri())

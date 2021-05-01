@@ -1,0 +1,10 @@
+{
+	"unofficial": "duckduckgo.com",
+	"data": {
+		"issuedBy": "danik",
+		"site": {
+			"name": "duckduckgo",
+			"desc": "a search engine"
+		}
+	}
+}

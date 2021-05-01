@@ -1,0 +1,16 @@
+<title>bad page</title>
+
+<script>
+	function sleep(ms) {
+  	return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	sleep(5000).then(() => {
+		window.location.href = 'https://google.com'
+	})
+</script>
+
+<!--{WBSCRIPT}
+commands:
+  - { cmd: 'save-bookmark' }
+{/WBSCRIPT}-->
