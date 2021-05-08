@@ -31,6 +31,11 @@ import { PrivateWbScriptManager } from './wbscript/PrivateWbScriptManager'
 import { PublicWbScriptManager } from './wbscript/PublicWbScriptManager'
 import { Lock } from './Lock'
 import { installCertificate } from './installCertificate'
+import { makeHistory } from './makeHistory'
+import { errorHandle } from './errorHandle'
+
+// Put before everything
+process.on('uncaughtException', errorHandle)
 
 const Gtk = gi.require('Gtk', '3.0')
 const WebKit2 = gi.require('WebKit2')
@@ -430,6 +435,10 @@ webView.on('load-changed', (loadEvent: WebKitLoadEvent) => {
 				setUri = false
 				const html = buildHtmlFromMd(String(fs.readFileSync(webView.getUri().slice(7))))
 				webView.loadHtml(html, 'WorstBrowser: Markdown')
+			}
+
+			if (urlBar.getText() === 'WorstBrowser/history') {
+				webView.loadHtml(makeHistory(history), 'History')
 			}
 
 			const mainResource = webView.getMainResource()

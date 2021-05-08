@@ -24,7 +24,8 @@ function run() {
 		return $_resp
 	fi
 
-	__addtrycatch "out"
+	# Not needed anymore!
+	# __addtrycatch "out"
 
 	node out/main.js \
 		"./config.json" \
@@ -90,6 +91,7 @@ shift
 echo -e "Starting :\e[1m$cmd\e[0m"
 
 errlog="logs/$(date | sed -e 's/ /-/g')-err.log"
+export WORSTBROWSER_ERRORLOG="$errlog"
 
 $cmd $@ 2>"$errlog"
 resp=$?
